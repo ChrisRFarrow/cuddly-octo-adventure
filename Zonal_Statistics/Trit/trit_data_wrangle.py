@@ -2,12 +2,13 @@ import pandas as pd
 import numpy as np
 
 # Variables Declaration Section 
+contaminant = 'Trit'
 input_file_1 = 'Trit_2020_check090622.csv'
-input_file_2 = 'Trit_zonal_statistics.csv'
-base_output_file = 'Python_data_processing_output/trit_Conc_Comparison.csv'
-calc1_output_file = 'Python_data_processing_output/calc1_trit_Conc_Comparison.csv'
-calc2_output_file = 'Python_data_processing_output/Trit_Final_Calc_Output.csv'
-output_false_file = 'Python_data_processing_output/trit_FALSE_Conc_Values.csv'
+input_file_2 = f'{contaminant}_zonal_statistics.csv'
+base_output_file = f'Python_data_processing_output/{contaminant}_Conc_Comparison.csv'
+calc1_output_file = f'Python_data_processing_output/calc1_{contaminant}_Conc_Comparison.csv'
+calc2_output_file = f'Python_data_processing_output/{contaminant}_Final_Calc_Output.csv'
+output_false_file = f'Python_data_processing_output/{contaminant}_FALSE_Conc_Values.csv'
 conc_thres = 0.01
 GT_OnePercent = 1
 GT_TwoFivePercent = 2.5
