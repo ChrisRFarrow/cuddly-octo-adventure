@@ -26,8 +26,7 @@ def contaminant_checking_calcs(directory_list):
     # Set the headers to be used for the percent values calculated below.
     headers = ['Contaminant', 'Total Row Count', 'Count Over 1 Percent', 'Count Over 2.5 Percent', 'Count Over 5 Percent', 'Count Over 10 Percent','Count Over 25 Percent', 'Count Over 50 Percent']
     df_calcs = pd.DataFrame(data = None, columns = headers)
-    df_calcs.to_csv('Contaminants_Calc_Output.csv', mode='a')
-    print(df_calcs)
+    df_calcs.to_csv('Contaminants_Calc_Output.csv', mode='w')
 
     for j in directory_list:
         # Variables Declaration Section 
@@ -71,7 +70,8 @@ def contaminant_checking_calcs(directory_list):
 
         # Calculate from the "Percent_Diff" column the number of cells over a specific percentage value.
         column = df_merge[colName] # 
-        # percents = [] # List to store each percent value calculated.
+        percents = [] # List to store each percent value calculated.
+        percents.append(" ")
         percents.append(contaminant)
         percents.append(len(df_merge.Percent_Diff)) # Total Row Count for Cell 0 in df_output_headers.
         percents.append(column[column > GT_OnePercent].count()) # Over 1 % for Cell 1 in df_output_headers.
@@ -82,16 +82,8 @@ def contaminant_checking_calcs(directory_list):
         percents.append(column[column > GT_FiftyPercent].count()) # Over 50 % for Cell 1 in df_output_headers.
         # Create the Pandas Data Frame with the output data and the correct headers.
         df_percents = pd.DataFrame(percents).transpose() # Transpose the multiple row list into a single row, multiple column Data Frame.
-        df_percents.columns = headers
-        df_calcs = df_calcs.concat([df_calcs, df_percents])
-        print(df_percents)
-        #df_calcs = pd.merge(df_calcs, df_percents) #([df_calcs, df_percents], ignore_index=True)
-        #print(df_calcs)
-    
-
-    # Finally, append the final output file with the current contaminant count values.
-    #df_percents.to_csv('Contaminants_Calc_Output.csv', mode='a')
-        #df_calcs = pd.concat([df_calcs, df_percents])
+        #df_percents.columns = headers
+        df_percents.to_csv('Contaminants_Calc_Output.csv', mode='a', index=False, header=False)
 
         
 
