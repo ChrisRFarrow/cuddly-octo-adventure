@@ -24,7 +24,10 @@ with open('Contaminants_Calc_Output.csv', 'a') as creating_new_csv_file:
 def contaminant_checking_calcs(directory_list):
     # Define the output Data Frame here, including the contaminant rows and column headings.
     # Set the headers to be used for the percent values calculated below.
-    headers = ['Total Row Count', 'Count Over 1 Percent', 'Count Over 2.5 Percent', 'Count Over 5 Percent', 'Count Over 10 Percent','Count Over 25 Percent', 'Count Over 50 Percent']
+    headers = ['Contaminant', 'Total Row Count', 'Count Over 1 Percent', 'Count Over 2.5 Percent', 'Count Over 5 Percent', 'Count Over 10 Percent','Count Over 25 Percent', 'Count Over 50 Percent']
+    df_calcs = pd.DataFrame(data = None, columns = headers)
+    df_calcs.to_csv('Contaminants_Calc_Output.csv', mode='a')
+    print(df_calcs)
 
     for j in directory_list:
         # Variables Declaration Section 
@@ -44,9 +47,9 @@ def contaminant_checking_calcs(directory_list):
         colName = 'Percent_Diff'
 
         # Get only the file names within a the current contaminant directory
-        print("\nOnly files:")
-        print([ name for name in os.listdir(contaminant) if not os.path.isdir(os.path.join(contaminant, name)) ])
-
+        #print("\nOnly files:")
+        #print([ name for name in os.listdir(contaminant) if not os.path.isdir(os.path.join(contaminant, name)) ])
+        ([ name for name in os.listdir(contaminant) if not os.path.isdir(os.path.join(contaminant, name)) ])
 
         # Two Data Frame declarations from two input files. These two will be merged into a single Data Frame.
         # First Data Frame (Cell centroid values)
@@ -66,31 +69,31 @@ def contaminant_checking_calcs(directory_list):
         # Output the Data Frame for general use, as needed.
         df_merge.to_csv(calc1_output_file)
 
-        
-
         # Calculate from the "Percent_Diff" column the number of cells over a specific percentage value.
         column = df_merge[colName] # 
-        Percents = [] # List to store each percent value calculated.
-        Percents.append(len(df_merge.Percent_Diff)) # Total Row Count for Cell 0 in df_output_headers.
-        Percents.append(column[column > GT_OnePercent].count()) # Over 1 % for Cell 1 in df_output_headers.
-        Percents.append(column[column > GT_TwoFivePercent].count()) # Over 2.5 % for Cell 1 in df_output_headers.
-        Percents.append(column[column > GT_FivePercent].count()) # Over 5 % for Cell 1 in df_output_headers.
-        Percents.append(column[column > GT_TenPercent].count()) # Over 10 % for Cell 1 in df_output_headers.
-        Percents.append(column[column > GT_TwentyFivePercent].count()) # Over 25 % for Cell 1 in df_output_headers.
-        Percents.append(column[column > GT_FiftyPercent].count()) # Over 50 % for Cell 1 in df_output_headers.
+        # percents = [] # List to store each percent value calculated.
+        percents.append(contaminant)
+        percents.append(len(df_merge.Percent_Diff)) # Total Row Count for Cell 0 in df_output_headers.
+        percents.append(column[column > GT_OnePercent].count()) # Over 1 % for Cell 1 in df_output_headers.
+        percents.append(column[column > GT_TwoFivePercent].count()) # Over 2.5 % for Cell 1 in df_output_headers.
+        percents.append(column[column > GT_FivePercent].count()) # Over 5 % for Cell 1 in df_output_headers.
+        percents.append(column[column > GT_TenPercent].count()) # Over 10 % for Cell 1 in df_output_headers.
+        percents.append(column[column > GT_TwentyFivePercent].count()) # Over 25 % for Cell 1 in df_output_headers.
+        percents.append(column[column > GT_FiftyPercent].count()) # Over 50 % for Cell 1 in df_output_headers.
         # Create the Pandas Data Frame with the output data and the correct headers.
-        df_calcs = pd.DataFrame(Percents).transpose() # = output_headers)
-        df_calcs.columns = headers # Set the headers on the new Data Frame, df_calcs
+        df_percents = pd.DataFrame(percents).transpose() # Transpose the multiple row list into a single row, multiple column Data Frame.
+        df_percents.columns = headers
+        df_calcs = df_calcs.concat([df_calcs, df_percents])
+        print(df_percents)
+        #df_calcs = pd.merge(df_calcs, df_percents) #([df_calcs, df_percents], ignore_index=True)
+        #print(df_calcs)
+    
 
-        # # Output the new Data Frame to a CSV file.
-        # df_calcs.to_csv(calc2_output_file)
+    # Finally, append the final output file with the current contaminant count values.
+    #df_percents.to_csv('Contaminants_Calc_Output.csv', mode='a')
+        #df_calcs = pd.concat([df_calcs, df_percents])
 
-        # # Output to the screen the final data frame
-        # print(df_calcs)
-
-        # # This needs to be the section where I write to the output file
-        #
-
+        
 
 # Initialize the for loop to run through each contaminant directory and perform the calcs.
 contaminant_checking_calcs(dir_list)
